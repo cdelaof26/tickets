@@ -1,6 +1,7 @@
 # Files
 *.pyc
 *.DS_Store
+static/tailwindcss*
 
 # Directories
 .idea
