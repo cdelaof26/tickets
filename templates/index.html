@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" type="text/css" href="/static/CSS/tout.css">
+		<script src="/static/index.js"></script>
+
+		<title>
+			Tickets
+		</title>
+	</head>
+	<body class="touch-manipulation flex flex-col justify-between w-full h-dvh p-8 text-primary-0 dark:text-primary-1 bg-body-0 dark:bg-body-1">
+		<div class="flex flex-col flex-grow space-y-4">
+			<h1 class="text-bold tracking-tight text-3xl">
+				Generador de tickets
+			</h1>
+			<div>
+				<h3 class="font-semibold tracking-tight text-lg">
+					Selecciona la plantilla a utilizar
+				</h3>
+				<div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+					<button id="gray" onclick="set_template(true)" class="text-center md:w-1/2 p-4 rounded-xl bg-sky-700 text-white hover:cursor-pointer">
+						Gris
+					</button>
+					<button id="black" onclick="set_template(false)" class="text-center md:w-1/2 p-4 rounded-xl bg-sidebar-0 dark:bg-sidebar-1 hover:cursor-pointer">
+						Negro
+					</button>
+				</div>
+			</div>
+
+			<div>
+				<h3 class="font-semibold tracking-tight text-lg">
+					Ingresa los números de ticket a generar separados por comas
+				</h3>
+				<label>
+					<textarea id="numbers-area" class="p-4 text-lg w-full resize-none rounded-xl bg-sidebar-0 dark:bg-sidebar-1"></textarea>
+				</label>
+			</div>
+
+			<div id="error" class="hidden rounded-lg p-4 border border-red-100 bg-red-100 dark:bg-red-300 text-red-950">
+				<h3 class="font-semibold text-lg"></h3>
+				<p></p>
+			</div>
+		</div>
+
+		<button onclick="gen_ticket()" class="rounded-lg w-full p-4 bg-sky-700 text-white">
+			Generar
+		</button>
+	</body>
+</html>

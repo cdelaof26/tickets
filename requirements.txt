@@ -1,0 +1,4 @@
+Flask
+azure-functions
+PyMuPDF
+flask-cors
