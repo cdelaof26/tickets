@@ -10,25 +10,33 @@ const REQUEST_BASE = {
 };
 
 let template = "gris";
+let associate = true;
 
-function set_template(is_gray) {
-    const gray = document.getElementById("gray");
-    const black = document.getElementById("black");
+function set_property(type, is_gray) {
+    const edit_template = type === "template";
+    const e1 = document.getElementById(edit_template ? "gray" : "yes-associate");
+    const e2 = document.getElementById(edit_template ? "black" : "no-associate");
 
     if (is_gray) {
-        gray.classList.add("bg-sky-700", "text-white");
-        gray.classList.remove("bg-sidebar-0", "dark:bg-sidebar-1");
+        e1.classList.add("bg-sky-700", "text-white");
+        e1.classList.remove("bg-sidebar-0", "dark:bg-sidebar-1");
 
-        black.classList.remove("bg-sky-700", "text-white");
-        black.classList.add("bg-sidebar-0", "dark:bg-sidebar-1");
-        template = "gris";
+        e2.classList.remove("bg-sky-700", "text-white");
+        e2.classList.add("bg-sidebar-0", "dark:bg-sidebar-1");
+        if (edit_template)
+            template = "gris";
+        else
+            associate = true;
     } else {
-        gray.classList.remove("bg-sky-700", "text-white");
-        gray.classList.add("bg-sidebar-0", "dark:bg-sidebar-1");
+        e1.classList.remove("bg-sky-700", "text-white");
+        e1.classList.add("bg-sidebar-0", "dark:bg-sidebar-1");
 
-        black.classList.add("bg-sky-700", "text-white");
-        black.classList.remove("bg-sidebar-0", "dark:bg-sidebar-1");
-        template = "negro";
+        e2.classList.add("bg-sky-700", "text-white");
+        e2.classList.remove("bg-sidebar-0", "dark:bg-sidebar-1");
+        if (edit_template)
+            template = "negro";
+        else
+            associate = false;
     }
 }
 
@@ -66,7 +74,7 @@ function gen_ticket() {
     let numbers = document.getElementById("numbers-area").value;
     numbers = numbers.trim();
 
-    fetch(HOST + `ticket?numbers=${numbers}&template=${template}`, REQUEST_BASE).then(async (response) => {
+    fetch(HOST + `ticket?numbers=${numbers}&template=${template}&associate=${associate}`, REQUEST_BASE).then(async (response) => {
         const json = JSON.parse(await response.text());
 
         if (response.status !== 200) {

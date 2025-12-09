@@ -20,10 +20,10 @@
 					Selecciona la plantilla a utilizar
 				</h3>
 				<div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-					<button id="gray" onclick="set_template(true)" class="text-center md:w-1/2 p-4 rounded-xl bg-sky-700 text-white hover:cursor-pointer">
+					<button id="gray" onclick="set_property('template', true)" class="text-center md:w-1/2 p-4 rounded-xl bg-sky-700 hover:bg-sky-800 transition-[colors] duration-300 text-white hover:cursor-pointer">
 						Gris
 					</button>
-					<button id="black" onclick="set_template(false)" class="text-center md:w-1/2 p-4 rounded-xl bg-sidebar-0 dark:bg-sidebar-1 hover:cursor-pointer">
+					<button id="black" onclick="set_property('template', false)" class="text-center md:w-1/2 p-4 rounded-xl bg-sidebar-0 dark:bg-sidebar-1 transition-[colors] duration-300 hover:cursor-pointer">
 						Negro
 					</button>
 				</div>
@@ -36,6 +36,20 @@
 				<label>
 					<textarea id="numbers-area" class="p-4 text-lg w-full resize-none rounded-xl bg-sidebar-0 dark:bg-sidebar-1"></textarea>
 				</label>
+			</div>
+
+			<div>
+				<h3 class="font-semibold tracking-tight text-lg">
+					Asociar 4 tickets
+				</h3>
+				<div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+					<button id="yes-associate" onclick="set_property('association', true)" class="text-center md:w-1/2 p-4 rounded-xl bg-sky-700 hover:bg-sky-800 transition-[colors] duration-300 text-white hover:cursor-pointer">
+						Cuando sea posible, cada 4 tickets serán puestos en el mismo PDF
+					</button>
+					<button id="no-associate" onclick="set_property('association', false)" class="text-center md:w-1/2 p-4 rounded-xl bg-sidebar-0 dark:bg-sidebar-1 transition-[colors] duration-300 hover:cursor-pointer">
+						No asociar, todos los tickets serán archivos individuales
+					</button>
+				</div>
 			</div>
 
 			<div id="error" class="hidden rounded-lg p-4 border border-red-100 bg-red-100 dark:bg-red-300 text-red-950">

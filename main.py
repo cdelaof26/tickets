@@ -3,6 +3,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 from flask_cors import CORS
 from datetime import date
 from pathlib import Path
+import tempfile
 import pymupdf
 import re
 import io
@@ -10,7 +11,6 @@ import io
 
 font_name = "ArialNarrow"
 font_file = "static/Arial Narrow Bold.ttf"
-base_path = Path("sold")
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*", "expose_headers": ["Content-Disposition"]}})
 
@@ -23,8 +23,8 @@ def _gen_single_ticket(template_name: str, num: int, _date: str, output_name: st
     page.insert_text(pymupdf.Point(315, 307), f"{num}", fontname="ArialNarrow", fontsize=64)
     page.insert_text(pymupdf.Point(390, 346), f"{_date}", fontname="ArialNarrow", fontsize=20)
 
-    base_path.mkdir(exist_ok=True)
-    output = base_path.joinpath(f"{output_name}.pdf")
+    temp_dir = Path(tempfile.gettempdir())
+    output = temp_dir.joinpath(f"{output_name}.pdf")
     template.save(output)
     template.close()
     return output
@@ -40,8 +40,8 @@ def _gen_four_ticket(template_name: str, numbers: list[int], _date: str, output_
         page.insert_text(pymupdf.Point(178, 175.3 + k), f"{num}", fontname="ArialNarrow", fontsize=30)
         page.insert_text(pymupdf.Point(210, 190.5 + k), f"{_date}", fontname="ArialNarrow", fontsize=9)
 
-    base_path.mkdir(exist_ok=True)
-    output = base_path.joinpath(f"{output_name}.pdf")
+    temp_dir = Path(tempfile.gettempdir())
+    output = temp_dir.joinpath(f"{output_name}.pdf")
     template.save(output)
     template.close()
     return output
@@ -53,7 +53,7 @@ def get_date(d: date) -> str:
     return f"{day}/{month}/{d.year}"
 
 
-def gen_tickets(template_name: str, numbers: list[int]) -> list[Path]:
+def gen_tickets(template_name: str, numbers: list[int], associate: bool) -> list[Path]:
     if len(numbers) == 0:
         return []
 
@@ -64,7 +64,7 @@ def gen_tickets(template_name: str, numbers: list[int]) -> list[Path]:
     today = date.today()
     today_str = get_date(today)
 
-    if len(numbers) < 4:
+    if len(numbers) < 4 or not associate:
         return [_gen_single_ticket(template_name, num, today_str, str(num)) for num in numbers]
 
     while len(numbers) % 4 != 0:
@@ -96,6 +96,12 @@ def ticket():
     if numbers is None:
         return jsonify({"message": "Se requiere de al menos un número de boleto"}), 400
 
+    associate = request.args.get("associate")
+    if associate is None:
+        associate = False
+    else:
+        associate = associate.lower() == "true"
+
     try:
         numbers = [int(n) for n in re.findall(r"\d+", numbers)]
     except ValueError:
@@ -108,7 +114,7 @@ def ticket():
         if num < 1 or num > 500:
             return jsonify({"message": f"El número de boleto {num} no es válido"}), 400
 
-    files = gen_tickets(template, numbers)
+    files = gen_tickets(template, numbers, associate)
     return jsonify({"message": "Boletos generados", "tickets": ",".join([file.name for file in files])}), 200
 
 
@@ -118,7 +124,8 @@ def download():
     if str_filenames is None:
         abort(400)
 
-    files = [base_path.joinpath(name) for name in str_filenames.split(",")]
+    temp_dir = Path(tempfile.gettempdir())
+    files = [temp_dir.joinpath(name) for name in str_filenames.split(",")]
 
     if len(files) == 1:
         if not files[0].exists():
