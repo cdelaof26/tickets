@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, send_file, abort, render_template
 from zipfile import ZipFile, ZIP_DEFLATED
+from datetime import date, datetime
 from flask_cors import CORS
-from datetime import date
+from pytz import timezone
 from pathlib import Path
 import tempfile
 import pymupdf
@@ -61,7 +62,8 @@ def gen_tickets(template_name: str, numbers: list[int], associate: bool) -> list
     numbers.sort()
 
     tickets = []
-    today = date.today()
+    mx = timezone("America/Mexico_City")
+    today = datetime.now(mx)
     today_str = get_date(today)
 
     if len(numbers) < 4 or not associate:

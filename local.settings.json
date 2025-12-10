@@ -3,5 +3,8 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "CfDJ8OieXBzyXAdOkq87ntaXl0RTf1wXBy93ErNMDjkb/Cj07kv1SSE5NuTjDbSMcMoICBvMRZfRLnkH4ZC2thDUUI1l8rtn1b2LnEQ8YY13KdVc+cH92irqzMaNW3IK1Lv/2w=="
   },
-  "ConnectionStrings": {}
+  "ConnectionStrings": {},
+  "Host": {
+    "CORS": "*"
+  }
 }
