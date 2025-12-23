@@ -7,6 +7,11 @@ la que se crea.
 Este programa utiliza Python y Azure Functions.
 
 ```bash
+# Test locally
+func start
+```
+
+```bash
 # Deploy
 func azure functionapp publish tickets
 ```

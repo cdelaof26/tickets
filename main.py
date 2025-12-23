@@ -145,8 +145,8 @@ def download():
 
             zipf.write(f, f.name)
 
-    for f in files:
-        f.unlink()
+    # for f in files:
+    #     f.unlink()
 
     buffer.seek(0)
     name = f"boletos_" + "_".join([f.name.replace(".pdf", "") for f in files]) + ".zip"
